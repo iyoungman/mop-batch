@@ -1,6 +1,5 @@
 package com.youngman.mopbatch.domain.entity;
 
-import com.youngman.mopbatch.domain.BaseDate;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,8 +22,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Club extends BaseDate implements Serializable {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "club_id")
 	private Long id;
 
@@ -41,7 +39,9 @@ public class Club extends BaseDate implements Serializable {
 	private List<MyClub> myClubs = new ArrayList<>();
 
 	@Builder
-	public Club(String name, String introduce, String region, String hobby, List<MyClub> myClubs) {
+	public Club(String name, String introduce,
+				String region, String hobby, List<MyClub> myClubs) {
+
 		this.name = name;
 		this.introduce = introduce;
 		this.region = region;

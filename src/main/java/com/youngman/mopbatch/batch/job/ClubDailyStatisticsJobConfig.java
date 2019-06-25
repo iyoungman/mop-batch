@@ -1,7 +1,7 @@
 package com.youngman.mopbatch.batch.job;
 
-import com.youngman.mopbatch.repository.MyClubRepository;
-import com.youngman.mopbatch.domain.entity.MyClub;
+import com.youngman.mopbatch.domain.entity.ClubDailyStatistics;
+import com.youngman.mopbatch.domain.dto.ClubDailyStatisticsDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -10,19 +10,17 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
-import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
-import org.springframework.batch.item.support.ListItemReader;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,49 +35,65 @@ public class ClubDailyStatisticsJobConfig {
 	private final JobBuilderFactory jobBuilderFactory;
 	private final StepBuilderFactory stepBuilderFactory;
 	private final EntityManagerFactory entityManagerFactory;
-	private final MyClubRepository myClubRepository;
+	private final JobCompletionListener jobCompletionListener;
 
-	private static final int chunkSize = 10;
+	private static final int CHUNK_SIZE = 10;
 
 
 	@Bean
 	public Job clubDailyStatisticsJob() {
 		return jobBuilderFactory.get("clubDailyStatisticsJob")
 				.preventRestart()
-				.start(clubDailyStatisticsStep())
+				.start(clubDailyStatisticsStep(null))
+				.listener(jobCompletionListener)
 				.build();
 	}
 
 	@Bean
 	@JobScope
-	public Step clubDailyStatisticsStep() {
+	public Step clubDailyStatisticsStep(@Value("#{jobParameters[jobName]}") String jobName) {
 		return stepBuilderFactory.get("clubDailyStatisticsStep")
-				.<MyClub, MyClub>chunk(chunkSize)
-				.reader(clubDailyStatisticsReader())
+				.<ClubDailyStatisticsDto, ClubDailyStatistics>chunk(CHUNK_SIZE)// Reader 에서 반환할 타입, Writer 에 파라미터로 넘어올 타입
+				.reader(clubDailyStatisticsReader(null))
+				.processor(clubDailyStatisticsProcessor())
 				.writer(clubDailyStatisticsWriter())
 				.build();
 	}
 
 	@Bean
-	public JpaPagingItemReader<MyClub> clubDailyStatisticsReader() {
-		JpaPagingItemReader<MyClub> jpaPagingItemReader = new JpaPagingItemReader<>();
-		jpaPagingItemReader.setQueryString("select mc from MyClub as mc where mc.createdDate = :createdDate");
+	@StepScope
+	public JpaPagingItemReader<ClubDailyStatisticsDto> clubDailyStatisticsReader(@Value("#{jobParameters[statisticsDate]}") String statisticsDate) {
+		JpaPagingItemReader<ClubDailyStatisticsDto> jpaPagingItemReader = new JpaPagingItemReader<>();
+		jpaPagingItemReader.setQueryString(
+				"select new com.youngman.mopbatch.domain.dto.ClubDailyStatisticsDto" +
+						"(mc.createdDate, (select count(*) from MyClub mc2 where mc.club = mc2.club), mc.id, c.id, c.name, m.email, m.name) " +
+						"from MyClub mc " +
+						"join mc.club c " +
+						"join mc.member m " +
+						"where mc.createdDate = :createdDate " +
+						"group by c.id, m.id " +
+						"order by c.id asc"
+		);
 
 		Map<String, Object> map = new HashMap<>();
-		map.put("createdDate", LocalDate.now());
+		map.put("createdDate", LocalDate.parse(statisticsDate).minusDays(3));
 
 		jpaPagingItemReader.setParameterValues(map);
-		jpaPagingItemReader.setEntityManagerFactory(entityManagerFactory); //(4)
-		jpaPagingItemReader.setPageSize(chunkSize);
+		jpaPagingItemReader.setEntityManagerFactory(entityManagerFactory);
+		jpaPagingItemReader.setPageSize(CHUNK_SIZE);
 		return jpaPagingItemReader;
 	}
 
-	private ItemWriter<MyClub> clubDailyStatisticsWriter() {
-		return list -> {
-			for (MyClub myClub: list) {
-				log.info("Current myClub => {}", myClub);
-			}
-		};
+	@Bean
+	public ItemProcessor<ClubDailyStatisticsDto, ClubDailyStatistics> clubDailyStatisticsProcessor() {
+		return ClubDailyStatistics::of;
+	}
+
+	@Bean
+	public ItemWriter<ClubDailyStatistics> clubDailyStatisticsWriter() {
+		JpaItemWriter<ClubDailyStatistics> jpaItemWriter = new JpaItemWriter<>();
+		jpaItemWriter.setEntityManagerFactory(entityManagerFactory);
+		return jpaItemWriter;
 	}
 
 }

@@ -25,4 +25,10 @@ spring:
     username: iyoungman
     password: duddnjsgl912!
 
-spring.batch.job.names: ${job.name:NONE}
+  batch:
+    job:
+      enabled: false
+
+
+#spring.batch.job.names: ${job.name:NONE}
+logging.level.org.springframework.batch: DEBUG

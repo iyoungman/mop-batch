@@ -1,4 +1,4 @@
-package com.youngman.mopbatch.domain;
+package com.youngman.mopbatch.domain.entity;
 
 import lombok.Getter;
 import lombok.Setter;

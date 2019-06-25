@@ -1,11 +1,9 @@
 package com.youngman.mopbatch.domain.entity;
 
-import com.youngman.mopbatch.domain.BaseDate;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 
 /**
  * Created by YoungMan on 2019-06-22.
@@ -22,11 +20,11 @@ public class MyClub extends BaseDate implements Serializable {
 	@Column(name = "my_club_id")
 	private Long id;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
 	private Member member;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "club_id")
 	private Club club;
 
@@ -34,16 +32,5 @@ public class MyClub extends BaseDate implements Serializable {
 	public MyClub(Member member, Club club) {
 		this.member = member;
 		this.club = club;
-	}
-
-	public static MyClub of(Member member, Club club) {
-		return MyClub.builder()
-				.member(member)
-				.club(club)
-				.build();
-	}
-
-	public void setModifiedDate(LocalDate modifiedDate) {
-		super.setModifiedDate(modifiedDate);
 	}
 }
