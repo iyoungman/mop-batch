@@ -1,5 +1,6 @@
 package com.youngman.mopbatch.infra.fcm.dto;
 
+import com.youngman.mopbatch.infra.fcm.constant.NotificationConstant;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,5 +23,12 @@ public class NotificationResponse {
 		this.sound = sound;
 		this.title = title;
 		this.body = body;
+	}
+
+	public static NotificationResponse of() {
+		return NotificationResponse.builder()
+				.title(NotificationConstant.TITLE)
+				.body(NotificationConstant.BODY)
+				.build();
 	}
 }

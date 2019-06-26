@@ -27,15 +27,8 @@ public class PushNotificationService {
 
 	public FirebaseResponse sendNotification(List<String> fcmTokens) {
 
-//		List<String> registrationIds = Arrays.asList(FcmConstant.SAMPLE_DEVICE_TOKEN);
-
-		NotificationResponse notificationResponse = NotificationResponse.builder()
-				.title("안녕하세요")
-				.body("body 입니다")
-				.build();
-
 		PushResponse pushResponse = PushResponse.builder()
-				.notificationResponse(notificationResponse)
+				.notificationResponse(NotificationResponse.of())
 				.registrationIds(fcmTokens)
 				.build();
 
@@ -60,11 +53,11 @@ public class PushNotificationService {
 		RestTemplate restTemplate = new RestTemplate();
 
 		ArrayList<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
-		interceptors.add(new HeaderRequestInterceptor("Authorization", "key=" + FcmConstant.FCM_KEY));
+		interceptors.add(new HeaderRequestInterceptor("Authorization", "key=" + FcmConstant.KEY));
 		interceptors.add(new HeaderRequestInterceptor("Content-Type", "application/json"));
 		restTemplate.setInterceptors(interceptors);
 
-		FirebaseResponse firebaseResponse = restTemplate.postForObject(FcmConstant.FCM_URL, entity, FirebaseResponse.class);
+		FirebaseResponse firebaseResponse = restTemplate.postForObject(FcmConstant.URL, entity, FirebaseResponse.class);
 
 		return CompletableFuture.completedFuture(firebaseResponse);
 	}
