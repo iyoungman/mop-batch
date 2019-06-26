@@ -22,7 +22,7 @@ import java.util.Set;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/mop/notification")
-public class NotificationApi {
+public class PushNotificationApi {
 
 	private final ChairFcmTokenFetchService chairFcmTokenFetchService;
 	private final PushNotificationService pushNotificationService;
