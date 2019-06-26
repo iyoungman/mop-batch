@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by YoungMan on 2019-06-25.
@@ -30,7 +31,7 @@ public class NotificationApi {
 	@GetMapping
 	public ResponseEntity<?> pushNotification() {
 		List<String> fcmTokens = chairFcmTokenFetchService.fetchChairFcmTokenByStatisticsDate();
-		FirebaseResponse firebaseResponse = pushNotificationService.sendNotification();
+		FirebaseResponse firebaseResponse = pushNotificationService.sendNotification(fcmTokens);
 
 		return new ResponseEntity<>(firebaseResponse, HttpStatus.OK);
 	}

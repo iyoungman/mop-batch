@@ -12,5 +12,5 @@ import java.util.List;
 
 public interface ClubDailyStatisticsRepository extends JpaRepository<ClubDailyStatistics, Long> {
 
-	List<String> findChairEmailsByStatisticsDate(LocalDate statisticsDate);
+	List<ClubDailyStatistics> findByStatisticsDate(LocalDate statisticsDate);
 }

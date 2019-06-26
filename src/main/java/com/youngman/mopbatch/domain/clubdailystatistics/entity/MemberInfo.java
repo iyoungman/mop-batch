@@ -1,6 +1,7 @@
 package com.youngman.mopbatch.domain.clubdailystatistics.entity;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
@@ -10,6 +11,7 @@ import javax.persistence.Embeddable;
  */
 
 @Embeddable
+@Getter
 @NoArgsConstructor
 public class MemberInfo {
 

@@ -76,7 +76,7 @@ public class ClubDailyStatisticsJobConfig {
 		);
 
 		Map<String, Object> map = new HashMap<>();
-		map.put("createdDate", LocalDate.parse(statisticsDate).minusDays(3));
+		map.put("createdDate", LocalDate.parse(statisticsDate).minusDays(1));
 
 		jpaPagingItemReader.setParameterValues(map);
 		jpaPagingItemReader.setEntityManagerFactory(entityManagerFactory);

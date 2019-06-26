@@ -1,7 +1,6 @@
 package com.youngman.mopbatch.infra.fcm.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.youngman.mopbatch.infra.fcm.dto.NotificationResponse;
 import lombok.*;
 
 import java.util.ArrayList;
