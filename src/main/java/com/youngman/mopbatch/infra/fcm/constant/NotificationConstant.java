@@ -8,5 +8,5 @@ public class NotificationConstant {
 
 	public final static String TITLE = "MoP";
 
-	public final static String BODY = "Hello MoP";
+	public final static String BODY = "일일 통계가 업데이트 되었습니다";
 }

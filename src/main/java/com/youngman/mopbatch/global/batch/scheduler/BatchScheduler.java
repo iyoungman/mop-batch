@@ -41,7 +41,7 @@ public class BatchScheduler {
 	public void schedule()  {
 		try {
 			jobLauncher.run(getJobByName("clubDailyStatisticsJob"), new JobParametersBuilder()
-					.addString("jobName", "clubDailyStatisticsJob4")
+					.addString("jobName", "clubDailyStatisticsJob")
 					.addString("statisticsDate", LocalDate.now().toString())
 					.toJobParameters()
 			);
