@@ -21,14 +21,20 @@ spring:
     open-in-view: true
 
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/mop?useSSL=false&serverTimezone=Asia/Seoul
-    username: iyoungman
+    url: jdbc:mysql://iyoungman-skuniv-mysql-1.chxhgtrfuigt.ap-northeast-2.rds.amazonaws.com:3306/mop?useSSL=false&serverTimezone=Asia/Seoul
+    username: root
     password: duddnjsgl912!
 
   batch:
     job:
       enabled: false
 
+server:
+    port: 8090
 
 #spring.batch.job.names: ${job.name:NONE}
-logging.level.org.springframework.batch: DEBUG
+logging:
+  level:
+    org:
+      springframework:
+        batch: DEBUG

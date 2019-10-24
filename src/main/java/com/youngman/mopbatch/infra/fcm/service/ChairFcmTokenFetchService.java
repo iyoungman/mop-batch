@@ -18,9 +18,8 @@ public class ChairFcmTokenFetchService {
 	private final ClubDailyStatisticsFindDao clubDailyStatisticsFindDao;
 	private final MemberFindDao memberFindDao;
 
-
 	public List<String> fetchChairFcmTokenByStatisticsDate() {
 		List<String> chairEmails = clubDailyStatisticsFindDao.findChairEmailsByStatisticsDate();
-		return memberFindDao.findFcmTokensByChairEmails(chairEmails);
+		return memberFindDao.findFcmTokensByEmails(chairEmails);
 	}
 }

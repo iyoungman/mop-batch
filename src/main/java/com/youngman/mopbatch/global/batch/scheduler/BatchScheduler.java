@@ -23,35 +23,33 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class BatchScheduler {
 
-	private final JobLauncher jobLauncher;
-	private final JobLocator jobLocator;
+    private final JobLauncher jobLauncher;
+    private final JobLocator jobLocator;
 
+    @Bean
+    public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor(JobRegistry jobRegistry) {
+        JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor = new JobRegistryBeanPostProcessor();
+        jobRegistryBeanPostProcessor.setJobRegistry(jobRegistry);
+        return jobRegistryBeanPostProcessor;
+    }
 
-	@Bean
-	public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor(JobRegistry jobRegistry) {
-		JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor = new JobRegistryBeanPostProcessor();
-		jobRegistryBeanPostProcessor.setJobRegistry(jobRegistry);
-		return jobRegistryBeanPostProcessor;
-	}
+    /**
+     * 초 분 시 일 월 요일 (연도)
+     */
+    @Scheduled(cron = "0 25 2 * * *")
+    public void schedule() {
+        try {
+            jobLauncher.run(getJobByName("clubDailyStatisticsJob"), new JobParametersBuilder()
+                    .addString("jobName", "clubDailyStatisticsJob")
+                    .addString("statisticsDate", LocalDate.now().toString())
+                    .toJobParameters()
+            );
+        } catch (Exception e) {
+            log.info("ERROR => {}", e.getMessage());
+        }
+    }
 
-	/**
-	 * 초 분 시 일 월 요일 (연도)
-	 */
-	@Scheduled(cron = "0 50 1 * * *")
-	public void schedule()  {
-		try {
-			jobLauncher.run(getJobByName("clubDailyStatisticsJob"), new JobParametersBuilder()
-					.addString("jobName", "clubDailyStatisticsJob")
-					.addString("statisticsDate", LocalDate.now().toString())
-					.toJobParameters()
-			);
-
-		} catch (Exception e) {
-			log.info("ERROR => {}", e.getMessage());
-		}
-	}
-
-	private Job getJobByName(String name) throws Exception{
-		return jobLocator.getJob(name);
-	}
+    private Job getJobByName(String name) throws Exception {
+        return jobLocator.getJob(name);
+    }
 }

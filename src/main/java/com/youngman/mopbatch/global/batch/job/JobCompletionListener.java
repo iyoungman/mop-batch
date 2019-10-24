@@ -20,7 +20,6 @@ public class JobCompletionListener extends JobExecutionListenerSupport {
 
 	private final RestTemplate restTemplate;
 
-
 	@Override
 	public void afterJob(JobExecution jobExecution) {
 		if(jobExecution.getStatus() == BatchStatus.COMPLETED) {
@@ -29,7 +28,7 @@ public class JobCompletionListener extends JobExecutionListenerSupport {
 	}
 
 	private void sendNotificationToClient() {
-		String requestUrl = "http://localhost:8080/mop/notification";
+		String requestUrl = "http://localhost:8090/mop/notification";
 		ResponseEntity<String> response = restTemplate.getForEntity(requestUrl, String.class);
 	}
 }

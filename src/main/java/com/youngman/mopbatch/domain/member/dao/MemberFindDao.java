@@ -15,18 +15,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberFindDao {
 
-	private final MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
+    public List<String> findFcmTokensByEmails(List<String> emails) {
+        List<Member> members = memberRepository.findByEmailIn(emails);
+        return fetchFcmTokens(members);
+    }
 
-	public List<String> findFcmTokensByChairEmails(List<String> chairEmails) {
-		List<Member> members =  memberRepository.findByEmailIn(chairEmails);
-		return fetchFcmTokens(members);
-	}
-
-	private List<String> fetchFcmTokens(List<Member> members) {
-		return members.stream()
-				.map(Member::getFcmToken)
-				.distinct()
-				.collect(Collectors.toList());
-	}
+    private List<String> fetchFcmTokens(List<Member> members) {
+        return members.stream()
+                .map(Member::getFcmToken)
+                .distinct()
+                .collect(Collectors.toList());
+    }
 }

@@ -27,11 +27,4 @@ public class PushResponse {
 		this.notificationResponse = notificationResponse;
 		this.registrationIds = registrationIds;
 	}
-
-	public static PushResponse of(List<String> registrationIds) {
-		return PushResponse.builder()
-				.notificationResponse(NotificationResponse.of())
-				.registrationIds(registrationIds)
-				.build();
-	}
 }

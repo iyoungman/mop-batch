@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
@@ -33,7 +32,7 @@ public class MemberFindDaoTest {
 		List<String> emails = Arrays.asList("test", "test2");
 
 		//when
-		List<String> fcmTokens = memberFindDao.findFcmTokensByChairEmails(emails);
+		List<String> fcmTokens = memberFindDao.findFcmTokensByEmails(emails);
 
 		//then
 		assertThat(fcmTokens, is(notNullValue()));
