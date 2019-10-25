@@ -21,27 +21,26 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class TestJobConfig {
 
-	private final JobBuilderFactory jobBuilderFactory;
-	private final StepBuilderFactory stepBuilderFactory;
+    private final JobBuilderFactory jobBuilderFactory;
+    private final StepBuilderFactory stepBuilderFactory;
 
+    @Bean
+    public Job testJob() {
+        return jobBuilderFactory.get("testJob")
+                .start(testStepOne(null))
+                .build();
+    }
 
-	@Bean
-	public Job testJob() {
-		return jobBuilderFactory.get("testJob")
-				.start(testStepOne(null))
-				.build();
-	}
-
-	@Bean
-	@JobScope
-	public Step testStepOne(@Value("#{jobParameters[requestDate]}") String requestData) {
-		return stepBuilderFactory.get("testStepOne")
-				.tasklet((contribution, chunkContext) -> {//스텝안에 수행될 기능
-					log.info(">>>>> This is Step1");
-					log.info(">>>>> requestData = {}", requestData);
-					return RepeatStatus.FINISHED;
-				})
-				.build();
-	}
+    @Bean
+    @JobScope
+    public Step testStepOne(@Value("#{jobParameters[requestDate]}") String requestData) {
+        return stepBuilderFactory.get("testStepOne")
+                .tasklet((contribution, chunkContext) -> {//스텝안에 수행될 기능
+                    log.info(">>>>> This is Step1");
+                    log.info(">>>>> requestData = {}", requestData);
+                    return RepeatStatus.FINISHED;
+                })
+                .build();
+    }
 
 }

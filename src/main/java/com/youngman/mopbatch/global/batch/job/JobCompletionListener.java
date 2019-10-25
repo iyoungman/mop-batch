@@ -18,17 +18,17 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class JobCompletionListener extends JobExecutionListenerSupport {
 
-	private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
-	@Override
-	public void afterJob(JobExecution jobExecution) {
-		if(jobExecution.getStatus() == BatchStatus.COMPLETED) {
-			sendNotificationToClient();
-		}
-	}
+    @Override
+    public void afterJob(JobExecution jobExecution) {
+        if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
+            sendNotificationToClient();
+        }
+    }
 
-	private void sendNotificationToClient() {
-		String requestUrl = "http://localhost:8090/mop/notification";
-		ResponseEntity<String> response = restTemplate.getForEntity(requestUrl, String.class);
-	}
+    private void sendNotificationToClient() {
+        String requestUrl = "http://13.125.213.79:8090/mop/notification";
+        ResponseEntity<String> response = restTemplate.getForEntity(requestUrl, String.class);
+    }
 }
