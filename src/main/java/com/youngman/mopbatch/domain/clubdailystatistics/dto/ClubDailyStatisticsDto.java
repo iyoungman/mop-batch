@@ -21,11 +21,9 @@ public class ClubDailyStatisticsDto {
 	private String memberEmail;
 	private String memberName;
 
-
 	@Builder
 	public ClubDailyStatisticsDto(LocalDate statisticsDate, Long count, Long myClubId, Long clubId,
 								  String clubName, String chairEmail, String memberEmail, String memberName) {
-
 		this.statisticsDate = statisticsDate;
 		this.count = count;
 		this.myClubId = myClubId;

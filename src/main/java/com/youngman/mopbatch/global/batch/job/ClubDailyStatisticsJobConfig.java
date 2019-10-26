@@ -39,7 +39,6 @@ public class ClubDailyStatisticsJobConfig {
 
 	private static final int CHUNK_SIZE = 10;
 
-
 	@Bean
 	public Job clubDailyStatisticsJob() {
 		return jobBuilderFactory.get("clubDailyStatisticsJob")

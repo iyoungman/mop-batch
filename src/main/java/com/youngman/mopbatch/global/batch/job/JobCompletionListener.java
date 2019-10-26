@@ -30,5 +30,6 @@ public class JobCompletionListener extends JobExecutionListenerSupport {
     private void sendNotificationToClient() {
         String requestUrl = "http://13.125.213.79:8090/mop/notification";
         ResponseEntity<String> response = restTemplate.getForEntity(requestUrl, String.class);
+        log.info("response => {}", response);
     }
 }
