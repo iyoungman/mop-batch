@@ -37,7 +37,7 @@ public class BatchScheduler {
     /**
      * 초 분 시 일 월 요일 (연도)
      */
-    @Scheduled(cron = "0 2 0 * * *")
+    @Scheduled(cron = "0 35 0 * * *")
     public void schedule() {
         try {
             jobLauncher.run(getJobByName("clubDailyStatisticsJob"), new JobParametersBuilder()
