@@ -10,6 +10,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaItemWriter;
@@ -42,8 +43,9 @@ public class ClubDailyStatisticsJobConfig {
 	@Bean
 	public Job clubDailyStatisticsJob() {
 		return jobBuilderFactory.get("clubDailyStatisticsJob")
-				.preventRestart()
 				.start(clubDailyStatisticsStep(null))
+                .incrementer(new RunIdIncrementer())
+//                .preventRestart()// 항상 처음부터 재시작
 				.listener(jobCompletionListener)
 				.build();
 	}
@@ -65,7 +67,7 @@ public class ClubDailyStatisticsJobConfig {
 		JpaPagingItemReader<ClubDailyStatisticsDto> jpaPagingItemReader = new JpaPagingItemReader<>();
 		jpaPagingItemReader.setQueryString(
 				"select new com.youngman.mopbatch.domain.clubdailystatistics.dto.ClubDailyStatisticsDto" +
-						"(mc.createdDate, (select count(*) from MyClub mc2 where mc.club = mc2.club), mc.id, c.id, c.name, c.chairEmail, m.email, m.name) " +
+						"(mc.createdDate, (SELECT count(*) FROM MyClub mc2 WHERE mc.club = mc2.club), mc.id, c.id, c.name, c.chairEmail, m.email, m.name) " +
 						"from MyClub mc " +
 						"join mc.club c " +
 						"join mc.member m " +

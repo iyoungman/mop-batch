@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * Created by YoungMan on 2019-06-25.
@@ -36,12 +37,13 @@ public class BatchScheduler {
     /**
      * 초 분 시 일 월 요일 (연도)
      */
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 2 0 * * *")
     public void schedule() {
         try {
             jobLauncher.run(getJobByName("clubDailyStatisticsJob"), new JobParametersBuilder()
                     .addString("jobName", "clubDailyStatisticsJob")
                     .addString("statisticsDate", LocalDate.now().toString())
+                    .addLong("currentTime", System.currentTimeMillis())
                     .toJobParameters()
             );
         } catch (Exception e) {
