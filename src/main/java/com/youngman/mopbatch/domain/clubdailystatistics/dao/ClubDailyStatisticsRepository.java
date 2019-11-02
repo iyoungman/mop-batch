@@ -23,7 +23,7 @@ public interface ClubDailyStatisticsRepository extends JpaRepository<ClubDailySt
 			"SELECT new com.youngman.mopbatch.domain.clubdailystatistics.dto.ClubSignCount(c.statisticsDate, c.todaySignCount) " +
 			"FROM ClubDailyStatistics c " +
 			"WHERE c.clubInfo.clubId = :clubId AND c.statisticsDate > :startDate AND c.statisticsDate < :endDate " +
-			"ORDER BY c.statisticsDate DESC")
+			"ORDER BY c.statisticsDate ASC")
 	List<ClubSignCount> findByStatisticsDate(@Param("clubId") Long clubId,
 											 @Param("startDate") LocalDate startDate,
 											 @Param("endDate") LocalDate endDate);

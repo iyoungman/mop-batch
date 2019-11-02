@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,10 +35,30 @@ public class ClubDailyStatisticsFindDao {
     }
 
     public ClubSignCountResponse findSignCount(Long clubId) {
-        List<ClubSignCount> clubSignCounts = clubDailyStatisticsRepository.findByStatisticsDate(clubId, LocalDate.now().minusDays(15), LocalDate.now());
-        for (ClubSignCount clubSignCount : clubSignCounts) {
-            clubSignCount.convertToDay();
+        LocalDate startDay = LocalDate.now().minusDays(15);
+        LocalDate endDay = LocalDate.now();
+        List<ClubSignCount> clubSignCounts = clubDailyStatisticsRepository.findByStatisticsDate(clubId, startDay, endDay);
+
+        return refineSignCount(startDay, clubSignCounts);
+    }
+
+    private ClubSignCountResponse refineSignCount(LocalDate startDay, List<ClubSignCount> clubSignCounts) {
+        List<ClubSignCount> result = new ArrayList<>();
+        int check = 0;
+        for (int i = 0; i < 15; i++) {
+            if (check < clubSignCounts.size() && startDay.isEqual(clubSignCounts.get(check).getStatisticsDate())) {
+                ClubSignCount clubSignCount = clubSignCounts.get(check);
+                clubSignCount.convertToDay();
+                result.add(clubSignCount);
+                check++;
+            } else {
+                ClubSignCount emptyClubSignCount = new ClubSignCount(startDay, 0);
+                emptyClubSignCount.convertToDay();
+                result.add(emptyClubSignCount);
+            }
+            startDay = startDay.plusDays(1);
         }
-        return new ClubSignCountResponse(clubSignCounts);
+
+        return new ClubSignCountResponse(result);
     }
 }
