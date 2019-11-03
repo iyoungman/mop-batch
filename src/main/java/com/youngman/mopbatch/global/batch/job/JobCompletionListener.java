@@ -19,6 +19,8 @@ import org.springframework.web.client.RestTemplate;
 public class JobCompletionListener extends JobExecutionListenerSupport {
 
     private final RestTemplate restTemplate;
+    private static final String localRequestUrl =  "http://localhost:8090/mop/notification";
+    private static final String productionRequestUrl = "http://13.125.213.79:8090/mop/notification";
 
     @Override
     public void afterJob(JobExecution jobExecution) {
@@ -28,9 +30,7 @@ public class JobCompletionListener extends JobExecutionListenerSupport {
     }
 
     private void sendNotificationToClient() {
-//        String requestUrl = "http://localhost:8090/mop/notification";
-        String requestUrl = "http://13.125.213.79:8090/mop/notification";
-        ResponseEntity<String> response = restTemplate.getForEntity(requestUrl, String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity(productionRequestUrl, String.class);
         log.info("response => {}", response);
     }
 }
