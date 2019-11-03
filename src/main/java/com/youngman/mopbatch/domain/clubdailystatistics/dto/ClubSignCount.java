@@ -1,5 +1,6 @@
 package com.youngman.mopbatch.domain.clubdailystatistics.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ClubSignCount {
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate statisticsDate;
     private String day;
     private long count;
@@ -26,4 +28,5 @@ public class ClubSignCount {
     public void convertToDay() {
         this.day = String.valueOf(statisticsDate.getDayOfMonth());
     }
+
 }
