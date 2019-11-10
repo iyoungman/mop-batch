@@ -21,7 +21,6 @@ public class PushResponse {
 	@JsonProperty(value = "registration_ids")
 	private List<String> registrationIds = new ArrayList<>();
 
-
 	@Builder
 	public PushResponse(NotificationResponse notificationResponse, List<String> registrationIds) {
 		this.notificationResponse = notificationResponse;
