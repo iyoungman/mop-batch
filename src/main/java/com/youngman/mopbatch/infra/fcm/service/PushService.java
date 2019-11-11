@@ -1,5 +1,7 @@
 package com.youngman.mopbatch.infra.fcm.service;
 
+import com.youngman.mopbatch.domain.member.dao.MemberFindDao;
+import com.youngman.mopbatch.domain.member.dao.MemberRepository;
 import com.youngman.mopbatch.global.interceptor.HeaderRequestInterceptor;
 import com.youngman.mopbatch.infra.fcm.constant.EmergencyMessage;
 import com.youngman.mopbatch.infra.fcm.constant.FcmConstant;
@@ -7,6 +9,7 @@ import com.youngman.mopbatch.infra.fcm.constant.StatisticsMessage;
 import com.youngman.mopbatch.infra.fcm.dto.FirebaseResponse;
 import com.youngman.mopbatch.infra.fcm.dto.NotificationResponse;
 import com.youngman.mopbatch.infra.fcm.dto.PushResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -25,10 +28,15 @@ import java.util.concurrent.ExecutionException;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class PushService {
 
+    private final MemberFindDao memberFindDao;
+
     public FirebaseResponse sendNotification(List<String> fcmTokens, String sender) {
-        HttpEntity<PushResponse> request = new HttpEntity<>(getPushResponse(fcmTokens, sender));
+        String senderName = memberFindDao.findNameByEmail(sender);
+
+        HttpEntity<PushResponse> request = new HttpEntity<>(getPushResponse(fcmTokens, senderName));
         CompletableFuture<FirebaseResponse> pushNotification = this.send(request);
         CompletableFuture.allOf(pushNotification).join();
 

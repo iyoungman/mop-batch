@@ -28,4 +28,8 @@ public class MemberFindDao {
                 .distinct()
                 .collect(Collectors.toList());
     }
+
+    public String findNameByEmail(String email) {
+        return memberRepository.findNameByEmail(email).getName();
+    }
 }

@@ -14,4 +14,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	@Query("select m from Member m where m.email in :emails")
 	List<Member> findByEmailIn(List<String> emails);
+
+	@Query("select m from Member m where m.email = :email")
+	Member findNameByEmail(String email);
 }
