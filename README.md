@@ -19,3 +19,4 @@ https://github.com/iyoungman/mop-android
 * Maven(Build Tool)
 * Spring Data JPA, QueryDSL
 * MySQL(RDBMS)
+* Firebase Cloud Messaging(Push 알림)
