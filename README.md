@@ -1,6 +1,9 @@
 # mop-batch
 > MoP(Meeting of People)  동호회 애플리케이션 배치 서버
 
+## Introduce
+https://github.com/iyoungman/mop-android
+
 ## About
 동호회장 권한을 가지고 있는 회원들에게 하루가 끝나는 특정 시간 마다 서버에서 동호회의 일일 통계를 배치를 돌린 후 성공하면 클라이언트(안드로이드)로 Push알림을 보내  확인 할 수 있도록 한다.
 
