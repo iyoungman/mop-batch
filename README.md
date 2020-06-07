@@ -10,3 +10,9 @@
   + 하루에 한번 자정에 스케줄링
 * Push 알림
   + 배치 스케줄링이 성공하면 동호회장에게 Push 알림(일반 회원은 제외)
+  
+## Usage
+* Spring Boot(Spring Starter Web, Spring Starter Batch)
+* Maven(Build Tool)
+* Spring Data JPA, QueryDSL
+* MySQL(RDBMS)
